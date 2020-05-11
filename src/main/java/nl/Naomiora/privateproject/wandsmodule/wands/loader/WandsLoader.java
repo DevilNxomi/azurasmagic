@@ -59,8 +59,6 @@ public class WandsLoader {
         loadableSpells.add(new EarthSmash());
         loadableSpells.add(new FireBreath());
         loadableSpells.add(new NatureGrowth());
-        loadableSpells.add(new BloodHeal());
-        loadableSpells.add(new DarkConfuse());
 
         for (WandBase loadableWand : loadableWands) {
             boolean cancelled = false;
