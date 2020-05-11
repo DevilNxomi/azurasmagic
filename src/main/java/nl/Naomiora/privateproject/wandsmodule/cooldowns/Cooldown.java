@@ -20,9 +20,7 @@ public class Cooldown {
     public Cooldown(Player player, Spell spell, long revertTime) {
         this.player = player;
         this.spell = spell;
-        if(!cooldowns.containsKey(player.getUniqueId())) {
-            cooldowns.put(player.getUniqueId(), new ArrayList<>());
-        }
+        if(!cooldowns.containsKey(player.getUniqueId())) cooldowns.put(player.getUniqueId(), new ArrayList<>());
         cooldowns.get(player.getUniqueId()).add(spell);
 
         this.setRevertTime(revertTime);
@@ -41,18 +39,14 @@ public class Cooldown {
     }
 
     public static Cooldown getCooldownObject(Player player, Spell spell) {
-        for(Cooldown cooldown : REVERT_QUEUE) {
-            if(cooldown.getPlayer().getUniqueId().equals(player.getUniqueId()) && cooldown.getSpell().equals(spell)) {
+        for(Cooldown cooldown : REVERT_QUEUE)
+            if (cooldown.getPlayer().getUniqueId().equals(player.getUniqueId()) && cooldown.getSpell().equals(spell))
                 return cooldown;
-            }
-        }
         return null;
     }
 
     public void setRevertTime(long revertTime) {
-        if (this.inRevertQueue) {
-            REVERT_QUEUE.remove(this);
-        }
+        if (this.inRevertQueue) REVERT_QUEUE.remove(this);
         this.inRevertQueue = true;
         this.revertTime = (revertTime + System.currentTimeMillis());
         REVERT_QUEUE.add(this);
@@ -68,9 +62,7 @@ public class Cooldown {
                 long currentTime = System.currentTimeMillis();
                 while (!Cooldown.REVERT_QUEUE.isEmpty()) {
                     Cooldown cooldown = Cooldown.REVERT_QUEUE.peek();
-                    if (currentTime < cooldown.revertTime) {
-                        break;
-                    }
+                    if (currentTime < cooldown.revertTime) break;
                     Cooldown.REVERT_QUEUE.poll();
                     cooldown.removeCooldown();
                 }

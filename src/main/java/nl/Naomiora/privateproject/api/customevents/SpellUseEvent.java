@@ -14,9 +14,9 @@ import javax.annotation.Nonnull;
 
 public class SpellUseEvent extends Event implements Cancellable {
     @Getter
-    private final Spell spellBase;
+    private final Spell spell;
     @Getter
-    private final SomeWand wandBase;
+    private final SomeWand wand;
     @Getter
     private final Player player;
     @Getter
@@ -30,8 +30,8 @@ public class SpellUseEvent extends Event implements Cancellable {
      * @param player which is casting the spell
      */
     public SpellUseEvent(@Nonnull SomeWand wandBase, @Nonnull Spell spellBase, @Nonnull Player player) {
-        this.spellBase = spellBase;
-        this.wandBase = wandBase;
+        this.spell = spellBase;
+        this.wand = wandBase;
         this.player = player;
     }
 

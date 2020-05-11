@@ -8,7 +8,7 @@ import org.bukkit.event.HandlerList;
 
 public class WandLoadEvent extends Event implements Cancellable {
     @Getter
-    private final SomeWand wandClass;
+    private final SomeWand wand;
     private static final HandlerList HANDLERS_LIST = new HandlerList();
     @Getter
     private boolean isCancelled = false;
@@ -18,7 +18,7 @@ public class WandLoadEvent extends Event implements Cancellable {
      * @param wandClass which is about to load
      */
     public WandLoadEvent(SomeWand wandClass) {
-        this.wandClass = wandClass;
+        this.wand = wandClass;
     }
 
     @Override

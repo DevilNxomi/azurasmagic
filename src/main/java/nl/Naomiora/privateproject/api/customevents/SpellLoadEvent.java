@@ -8,7 +8,7 @@ import org.bukkit.event.HandlerList;
 
 public class SpellLoadEvent extends Event implements Cancellable {
     @Getter
-    private final SpellBase spellBase;
+    private final SpellBase spell;
     @Getter
     private boolean isCancelled = false;
     private static final HandlerList HANDLERS_LIST = new HandlerList();
@@ -18,7 +18,7 @@ public class SpellLoadEvent extends Event implements Cancellable {
      * @param spellBase which is about to load
      */
     public SpellLoadEvent(SpellBase spellBase) {
-        this.spellBase = spellBase;
+        this.spell = spellBase;
     }
 
     @Override
