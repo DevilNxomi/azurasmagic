@@ -1,0 +1,22 @@
+main: nl.Naomiora.privateproject.PrivateProject
+name: AzurasMagic
+version: ${project.version}
+api-version: "1.14"
+description: AzurasMagic is a plugin with as the name suggests, all kinds of magic stuff!
+commands:
+  bindall:
+    description: Command to bind all spells to your wand.
+    usage: /<command>
+  bind:
+    description: Command to bind a specific spell to your wand.
+    usage: /<command>
+  unbindall:
+    description: Command to unbind all spells from your wand.
+    usage: /<command>
+  unbind:
+    description: Command to unbind a specific spell from your wand.
+    usage: /<command>
+  am:
+    description: The general azuras magic command.
+    usage: /<command>
+    aliases: ["azurasmagic", "amagic"]
