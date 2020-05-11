@@ -10,6 +10,10 @@ public class SpellLoadedEvent extends Event {
     private final SpellBase spell;
     private static final HandlerList HANDLERS_LIST = new HandlerList();
 
+    /**
+     * Gets called when a spell has been LOADED, you cannot cancel the loading process if you listen to this event.
+     * @param spellBase the spell which has been loaded
+     */
     public SpellLoadedEvent(SpellBase spellBase) {
         this.spell = spellBase;
     }

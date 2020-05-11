@@ -10,6 +10,8 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import javax.annotation.Nonnull;
+
 public class SpellUseEvent extends Event implements Cancellable {
     @Getter
     private final Spell spellBase;
@@ -21,7 +23,13 @@ public class SpellUseEvent extends Event implements Cancellable {
     private boolean isCancelled = false;
     private static final HandlerList HANDLERS_LIST = new HandlerList();
 
-    public SpellUseEvent(SomeWand wandBase, Spell spellBase, Player player) {
+    /**
+     * This gets called before a spell is being cast, you can use this event to cancel the spell cast.
+     * @param wandBase which is being used to cast the spell
+     * @param spellBase being cast
+     * @param player which is casting the spell
+     */
+    public SpellUseEvent(@Nonnull SomeWand wandBase, @Nonnull Spell spellBase, @Nonnull Player player) {
         this.spellBase = spellBase;
         this.wandBase = wandBase;
         this.player = player;

@@ -9,6 +9,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class SpellSelectEvent extends Event implements Cancellable {
@@ -26,7 +27,14 @@ public class SpellSelectEvent extends Event implements Cancellable {
     private final Player player;
     private static final HandlerList HANDLERS_LIST = new HandlerList();
 
-    public SpellSelectEvent(@Nullable Spell from, Spell to, SomeWand wand, Player player) {
+    /**
+     * This gets called when before spell is being selected, you can use this event to cancel the spell selection.
+     * @param from previous spell, may be null if there wasn't a spell selected yet.
+     * @param to spell being selected
+     * @param wand which the player is using to select a spell
+     * @param player which is trying to select a new spell
+     */
+    public SpellSelectEvent(@Nullable Spell from, @Nonnull Spell to, @Nonnull SomeWand wand, @Nonnull Player player) {
         this.from = from;
         this.to = to;
         this.wand = wand;

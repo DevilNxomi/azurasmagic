@@ -10,6 +10,10 @@ public class WandLoadedEvent extends Event {
     private final WandBase wand;
     private static final HandlerList HANDLERS_LIST = new HandlerList();
 
+    /**
+     * Gets called when a wand has been LOADED, you cannot cancel the loading process if you listen to this event.
+     * @param wand the wand which has been loaded
+     */
     public WandLoadedEvent(WandBase wand) {
         this.wand = wand;
     }

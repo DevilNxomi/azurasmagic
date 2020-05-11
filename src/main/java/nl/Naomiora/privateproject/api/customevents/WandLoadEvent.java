@@ -13,6 +13,10 @@ public class WandLoadEvent extends Event implements Cancellable {
     @Getter
     private boolean isCancelled = false;
 
+    /**
+     * This gets called BEFORE a wand is loaded, you can cancel the registering process if you're listening to this event.
+     * @param wandClass which is about to load
+     */
     public WandLoadEvent(SomeWand wandClass) {
         this.wandClass = wandClass;
     }

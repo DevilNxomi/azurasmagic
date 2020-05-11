@@ -13,6 +13,10 @@ public class SpellLoadEvent extends Event implements Cancellable {
     private boolean isCancelled = false;
     private static final HandlerList HANDLERS_LIST = new HandlerList();
 
+    /**
+     * This gets called BEFORE a spell is loaded, you can cancel the registering process if you're listening to this event.
+     * @param spellBase which is about to load
+     */
     public SpellLoadEvent(SpellBase spellBase) {
         this.spellBase = spellBase;
     }
