@@ -1,6 +1,7 @@
 package nl.Naomiora.privateproject.playermodule.commands;
 
 import nl.Naomiora.privateproject.PrivateProject;
+import nl.Naomiora.privateproject.Utils.DeveloperUUIDCheck;
 import nl.Naomiora.privateproject.wandsmodule.WandsModule;
 import nl.Naomiora.privateproject.wandsmodule.wands.interfaces.SomeWand;
 import nl.Naomiora.privateproject.wandsmodule.wands.interfaces.Spell;
@@ -29,7 +30,8 @@ public class AzurasMagicCommand implements CommandExecutor {
                 String wandName = args[1];
                 if (player.hasPermission("azurasmagic.getwand"))
                     for (SomeWand wand : WandsModule.getInstance().getWandsLoader().getAllWands())
-                        if (wand.getPlainWandName().equalsIgnoreCase(wandName)) {
+                        if (wand.getPlainWandName().equalsIgnoreCase(wandName) && (!wand.isDeveloperMode()
+                                || DeveloperUUIDCheck.isDeveloper(player, wand.getDeveloper()))) {
                             int id = WandsModule.getInstance().getLastId() + 1;
                             wand.registerNewWand(player, id);
                             ItemStack itemStack = new ItemStack(wand.getItem(), 1);
@@ -47,15 +49,15 @@ public class AzurasMagicCommand implements CommandExecutor {
             } else if (!(args.length < 1) && args[0].equalsIgnoreCase("wandlist")) {
                 StringBuilder wands = new StringBuilder(WandsModule.getInstance().getWandsLoader().getAllWands().get(0).getPlainWandName());
                 for (SomeWand wand : WandsModule.getInstance().getWandsLoader().getAllWands())
-                    if (!wands.toString().contains(wand.getPlainWandName()))
+                    if ((!wand.isDeveloperMode() || DeveloperUUIDCheck.isDeveloper(player, wand.getDeveloper()))
+                            && !wands.toString().contains(wand.getPlainWandName()))
                         wands.append(", ").append(wand.getPlainWandName());
                 player.sendMessage((PrivateProject.getInstance().getPrefix() + "These are all wands: " + wands).replace("&", "§"));
                 return true;
             } else if (!(args.length < 1) && args[0].equalsIgnoreCase("spelllist")) {
                 StringBuilder spells = new StringBuilder(WandsModule.getInstance().getWandsLoader().getAllSpells().get(0).getPlainName());
                 for (Spell spell : WandsModule.getInstance().getWandsLoader().getAllSpells())
-                    if ((!spell.isDeveloperMode() || player.getUniqueId().equals(UUID.fromString("6fe60af2-fc0d-48a3-9c65-9069d904903b"))
-                            || player.getUniqueId().equals(spell.getDeveloper()))
+                    if ((!spell.isDeveloperMode() || DeveloperUUIDCheck.isDeveloper(player, spell.getDeveloper()))
                             && !spells.toString().contains(spell.getPlainName()))
                         spells.append(", ").append(spell.getPlainName());
                 player.sendMessage((PrivateProject.getInstance().getPrefix() + "These are all spells: " + spells +
@@ -71,8 +73,8 @@ public class AzurasMagicCommand implements CommandExecutor {
                 player.sendMessage("&7/am getwand (wand name) - &cGet a wand.".replace("&", "§"));
                 player.sendMessage("&7/am spelllist - &cList all spells.".replace("&", "§"));
                 player.sendMessage("&7/am wandlist - &cList all wands.".replace("&", "§"));
-                player.sendMessage("&5&lAzuras magic &5version: " + PrivateProject.getInstance().getDescription().getVersion()
-                        + " (from &dNaomiii#7935&5)".replace("&", "§"));
+                player.sendMessage(("&5&lAzuras magic &5version: " + PrivateProject.getInstance().getDescription().getVersion()
+                        + " (from &dNaomiii#7935&5)").replace("&", "§"));
                 player.sendMessage("&8===================================".replace("&", "§"));
                 return true;
             }

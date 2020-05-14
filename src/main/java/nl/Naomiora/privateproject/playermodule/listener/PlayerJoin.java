@@ -12,6 +12,7 @@ public class PlayerJoin implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        if(!PlayerModule.instance.getPlayerData().containsKey(player.getUniqueId())) PlayerModule.instance.getPlayerData().put(player.getUniqueId(), new PlayerData(player));
+        if(!PlayerModule.getInstance().getPlayerData().containsKey(player.getUniqueId()))
+            PlayerModule.getInstance().getPlayerData().put(player.getUniqueId(), new PlayerData(player));
     }
 }
