@@ -28,7 +28,7 @@ public class EarthSmash extends SpellBase {
         double width = 4.0;
         new BukkitRunnable() {
             int length = 0;
-            int maxLength = 24;
+            final int maxLength = 24;
 
             public void run() {
                 if (this.length > this.maxLength) {
@@ -54,16 +54,12 @@ public class EarthSmash extends SpellBase {
     private void playEffect(Block b, Player p) {
         b = getTopBlock(b.getLocation());
 
-        if (b.getType() == Material.AIR) {
-            return;
-        } else {
+        if (b.getType() != Material.AIR) {
             b.getWorld().playEffect(b.getLocation(), Effect.STEP_SOUND, b.getType());
 
-            for (Entity e : GetTargets.getEntitiesAroundPoint(b.getLocation(), 2)) {
-                if ((e instanceof LivingEntity) && e.getEntityId() != p.getEntityId()) {
+            for (Entity e : GetTargets.getEntitiesAroundPoint(b.getLocation(), 2))
+                if ((e instanceof LivingEntity) && e.getEntityId() != p.getEntityId())
                     e.setVelocity(new Vector(0.0, 1.5, 0.0));
-                }
-            }
         }
     }
 

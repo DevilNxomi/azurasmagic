@@ -8,8 +8,8 @@
     <artifactId>privateproject</artifactId>
     <version>0.2</version>
 
-
     <build>
+        <finalName>AzurasMagic-${project.version}</finalName>
         <defaultGoal>clean package</defaultGoal>
         <plugins>
             <plugin>

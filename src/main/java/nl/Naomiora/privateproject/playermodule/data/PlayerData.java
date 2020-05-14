@@ -39,13 +39,9 @@ public class PlayerData {
                     String inputLine;
                     boolean uuidNextLine = false;
                     while ((inputLine = in.readLine()) != null) {
-                        if(uuidNextLine) {
-                            for(String string : inputLine.split(" ")) {
-                                if(string.startsWith("value")) {
-                                    offlineUUID = Optional.of(string.replace("value=\"", "").replace("\"", ""));
-                                }
-                            }
-                        }
+                        if(uuidNextLine) for (String string : inputLine.split(" "))
+                            if (string.startsWith("value"))
+                                offlineUUID = Optional.of(string.replace("value=\"", "").replace("\"", ""));
 
                         uuidNextLine = inputLine.toLowerCase().contains("full uuid");
                     }

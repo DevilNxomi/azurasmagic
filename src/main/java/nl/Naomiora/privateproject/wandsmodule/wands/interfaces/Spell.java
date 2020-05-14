@@ -8,6 +8,7 @@ import java.util.UUID;
 public interface Spell {
     void castSpell(Player player);
     Optional<String> getCastMessage(boolean bool);
+    void updateSpell(Player player);
     boolean isToggleSpell();
     boolean isActive(Player player);
     String[] getSpellType();
