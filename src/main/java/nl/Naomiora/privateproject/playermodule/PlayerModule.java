@@ -1,7 +1,6 @@
 package nl.Naomiora.privateproject.playermodule;
 
 import lombok.Data;
-import lombok.Getter;
 import nl.Naomiora.privateproject.PrivateProject;
 import nl.Naomiora.privateproject.playermodule.commands.AzurasMagicCommand;
 import nl.Naomiora.privateproject.playermodule.commands.BindCommand;
@@ -18,8 +17,7 @@ import java.util.UUID;
 
 @Data
 public class PlayerModule {
-    @Getter
-    private static PlayerModule instance;
+    public static PlayerModule instance;
     private HashMap<UUID, PlayerData> playerData = new HashMap();
 
     public PlayerModule() {

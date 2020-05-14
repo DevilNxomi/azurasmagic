@@ -1,5 +1,6 @@
 package nl.Naomiora.privateproject.wandsmodule.wands.CommonerSpells;
 
+import nl.Naomiora.privateproject.PrivateProject;
 import nl.Naomiora.privateproject.Utils.GetTargets;
 import nl.Naomiora.privateproject.api.SpellBase;
 import nl.Naomiora.privateproject.wandsmodule.cooldowns.Cooldown;
@@ -11,21 +12,41 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 public class FireBreath extends SpellBase {
-    private int usedTime = 0;
+    public ArrayList<UUID> isActive = new ArrayList<>();
 
     @Override
     public void castSpell(Player player) {
-        if(isActive(player))
-            activeUsers.remove(player.getUniqueId());
-        else {
-            usedTime = 0;
-            activeUsers.add(player.getUniqueId());
+        if(isActive(player)) {
+            isActive.remove(player.getUniqueId());
+        } else {
+            isActive.add(player.getUniqueId());
+            new BukkitRunnable() {
+                double time;
+                public void run () {
+                    time+=0.05;
+                    if(time <= 10) {
+                        if (isActive(player)) {
+                            createBeam(player);
+                        } else {
+                            new Cooldown(player, getSpell(), Math.round((time * 1000) * 3));
+                            cancel();
+                        }
+                    } else {
+                        isActive.remove(player.getUniqueId());
+                        new Cooldown(player, getSpell(), Math.round((time * 1000) * 3));
+                        cancel();
+                    }
+                }
+            }.runTaskTimer(PrivateProject.getInstance(), 1L, 1L);
         }
     }
 
@@ -62,19 +83,6 @@ public class FireBreath extends SpellBase {
     }
 
     @Override
-    public void updateSpell(Player player) {
-        System.out.println("yeet?");
-        usedTime+=0.05;
-        if(usedTime <= 10) {
-            if (isActive(player)) createBeam(player);
-            else new Cooldown(player, getSpell(), Math.round((usedTime * 1000) * 3));
-        } else {
-            activeUsers.remove(player.getUniqueId());
-            new Cooldown(player, getSpell(), Math.round((usedTime * 1000) * 3));
-        }
-    }
-
-    @Override
     public Optional<String> getCastMessage(boolean bool) {
         return bool ? Optional.of("You turned off fire breath!") : Optional.of("You turned on fire breath!");
     }
@@ -105,7 +113,7 @@ public class FireBreath extends SpellBase {
 
     @Override
     public boolean isActive(Player player) {
-        return activeUsers.contains(player.getUniqueId());
+        return isActive.contains(player.getUniqueId());
     }
 
     @Override

@@ -1,9 +1,8 @@
 package nl.Naomiora.privateproject.playermodule.listener;
 
 import nl.Naomiora.privateproject.PrivateProject;
-import nl.Naomiora.privateproject.Utils.WandUtils;
-import nl.Naomiora.privateproject.api.SpellBase;
 import nl.Naomiora.privateproject.api.WandParticle;
+import nl.Naomiora.privateproject.Utils.WandUtils;
 import nl.Naomiora.privateproject.api.customevents.SpellSelectEvent;
 import nl.Naomiora.privateproject.api.customevents.SpellUseEvent;
 import nl.Naomiora.privateproject.wandsmodule.WandsModule;
@@ -38,14 +37,16 @@ public class PlayerInteract implements Listener {
 
         ItemStack itemStack = player.getInventory().getItemInMainHand();
         if (!itemStack.hasItemMeta()) return;
-        if (!(Objects.requireNonNull(itemStack.getItemMeta()).hasDisplayName()) || !(itemStack.getItemMeta().hasLore()))
-            return;
+        if (!(Objects.requireNonNull(itemStack.getItemMeta()).hasDisplayName()) || !(itemStack.getItemMeta().hasLore())) return;
         if (WandUtils.isWand(player, itemStack)) {
             event.setCancelled(true);
             if (event.getAction().equals(Action.LEFT_CLICK_AIR) || event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
-                if (!WandsModule.getInstance().getAllUsingWands().containsKey(WandUtils.getIdFromItemStack(itemStack)))
+                if (WandsModule.getInstance().getAllUsingWands().containsKey(WandUtils.getIdFromItemStack(itemStack)))
+                    this.castLeftClick(player, itemStack);
+                else {
                     WandUtils.registerNewWand(player, itemStack);
-                this.castLeftClick(player, itemStack);
+                    this.castLeftClick(player, itemStack);
+                }
             } else {
                 if (WandsModule.getInstance().getAllUsingWands().containsKey(WandUtils.getIdFromItemStack(itemStack)))
                     this.castRightClick(player, itemStack);
@@ -63,7 +64,7 @@ public class PlayerInteract implements Listener {
             if (wand.getSelectedSpell().isPresent()) {
                 SpellUseEvent event = new SpellUseEvent(wand, wand.getSelectedSpell().get(), player);
                 Bukkit.getPluginManager().callEvent(event);
-                if (!event.isCancelled()) {
+                if(!event.isCancelled()) {
                     if (Cooldown.cooldowns.containsKey(player.getUniqueId()) && Cooldown.cooldowns.get(player.getUniqueId())
                             .contains(wand.getSelectedSpell().get())) {
                         player.sendMessage((PrivateProject.getInstance().getPrefix() + "You're currently still on a %time% cooldown!")
@@ -71,13 +72,12 @@ public class PlayerInteract implements Listener {
                                         wand.getSelectedSpell().get()).getReadableTime() / 1000) + " seconds").replace("&", "§"));
                         return;
                     }
-                    if (wand.getSelectedSpell().get().getCastMessage(false).isPresent())
-                        player.sendMessage((PrivateProject.getInstance().getPrefix() + wand.getSelectedSpell().get()
-                                .getCastMessage(wand.getSelectedSpell().get().isActive(player)).get()).replace("&", "§"));
-                    if (wand.getSelectedSpell().get().isToggleSpell() && !wand.getSelectedSpell().get().isActive(event.getPlayer()))
-                        WandsModule.getInstance().getToggledSpells().add((SpellBase) wand.getSelectedSpell().get());
-                    else
-                        WandsModule.getInstance().getToggledSpells().remove(wand.getSelectedSpell().get());
+                    if (wand.getSelectedSpell().get().getCastMessage(false).isPresent()) {
+                        if (wand.getSelectedSpell().get().isToggleSpell()) {
+                            player.sendMessage((PrivateProject.getInstance().getPrefix() + wand.getSelectedSpell().get()
+                                    .getCastMessage(wand.getSelectedSpell().get().isActive(player)).get()).replace("&", "§"));
+                        }
+                    }
                     wand.getSelectedSpell().get().castSpell(player);
                 }
             }
@@ -93,7 +93,7 @@ public class PlayerInteract implements Listener {
             SpellSelectEvent event = new SpellSelectEvent(wand.getSelectedSpell().isPresent() ? wand.getSelectedSpell().get() : null,
                     player.isSneaking() ? wand.getPreviousSpell() : wand.getNextSpell(), wand, player);
             Bukkit.getPluginManager().callEvent(event);
-            if (!event.isCancelled()) {
+            if(!event.isCancelled()) {
                 for (Object particle : wand.getSelectionParticles()) {
                     if (particle instanceof WandParticle) {
                         WandParticle wandParticle = (WandParticle) particle;
